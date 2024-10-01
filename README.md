@@ -23,7 +23,7 @@ and
 
 ```bash
 python print_fires.py --file_path path/to/Agrofood_co2_emission.csv \
-	--country “United States of America” \
+	--country "United States of America" \
     --country_column 0 \
     --emissions_column 2
 ```
