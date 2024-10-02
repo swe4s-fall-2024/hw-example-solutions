@@ -60,8 +60,9 @@ def find_mean(data_points):
     return mean_emissions
 
 def find_standard_dev(data_points):
-
-    return
+    sd_emissions = statistics.stdev(data_points)
+    return sd_emissions
 
 def find_median(data_points):
-    return
+    median_emissions = statistics.median(data_points)
+    return median_emissions

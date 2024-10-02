@@ -8,6 +8,7 @@ Module that contains
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
+#new: now inlcudes all available funcitons
 from utils import *
 
 
@@ -19,6 +20,7 @@ def parse_command_line_args() -> Namespace:
         Namespace: the parsed command line arguments
     """
     parser = ArgumentParser(
+#new: now includes all operations
         description=(
             "Given the Agrofood_co2_emission.csv dataset, this script performs operations on a given column for a givencountry. \n"
             "Operations you can perform are: 'sum', 'median', 'mean', 'standard deviation'\n\n"
@@ -48,18 +50,19 @@ def parse_command_line_args() -> Namespace:
         help="The path to the Agrofood_co2_emission.csv",
         required=True,
     )
+#new: added "--operation" argument to argparse that is NOT required
     parser.add_argument(
         "--operation",
         type=str,
-        help="The operation to perform on emissions data (mean, median, standard deviation)",
-        required=True,
+        help="The operation to perform on emissions data (sum, mean, standard deviation,  median)",
+        required=False,
     )
 
     args = parser.parse_args()
 
     return args
 
-
+#new: added "operation" variable as a string
 def main(csv_path: Path, country: str, country_colm: int, emissions_colm: int, operation: str):
     """
     Workhorse function that:
@@ -72,21 +75,38 @@ def main(csv_path: Path, country: str, country_colm: int, emissions_colm: int, o
         country_colm (int): index of country column in the CSV
         emissions_colm (int): index of the emissions column in the CSV
         operation (str): operation to perform
-            options: "sum", "median", "mean", "standard deviation"
+            options: "sum", "mean", "standard deviation", "median"
     """
     rows = get_rows_by_column_value(file_path=csv_path, column_value=country, column_index=country_colm)
 
+#new: function to get array of data points to make operations easier
     data_points = get_data_points(rows,emissions_colm)
 
+#new: variable to store operation result
+    op_result = 0
+
+#new: match-case to run different operations
     match operation:
+#new: finding total emissions is it's own function called find_sum
         case "sum":
-            sum_emissions = find_sum(data_points)
-            print(f"In the {csv_path.name} dataset, for country='{country}', the {operation} of values in column {emissions_colm} is {sum_emissions}.")
+            op_result = find_sum(data_points)
+#new: running find_mean
         case "mean":
-            mean_emissions = find_mean(data_points)
-            print(f"In the {csv_path.name} dataset, for country='{country}', the {operation} of values in column {emissions_colm} is {sum_emissions}.")
+            op_result = find_mean(data_points)
+#new: running find_standard_dev
+        case "standard deviation":
+            op_result = find_standard_dev(data_points)
+#new: running find_median
+        case "median":
+            op_result = find_median(data_points)
+#new: as per assignment instruction, the default is returning sum. commented out is best practice
         case _:
-            raise ValueError("Operation not recognized")
+            operation = "sum"
+            op_result = find_sum(data_points)
+            #raise ValueError("Operation not recognized")
+    
+#printing desired result with operation
+    print(f"In the {csv_path.name} dataset, for country='{country}', the {operation} of values in column {emissions_colm} is {op_result}.")
 
 
 if __name__ == "__main__":
