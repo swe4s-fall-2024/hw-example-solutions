@@ -14,6 +14,7 @@ show_help() {
     echo "  -i  Index of country column"
     echo "  -e  Index of emissions column"
     echo "  -f  Path to Agrofood_co2_emission.csv"
+    echo "  -o  Operation to perform on emissions data"
     echo "  -h  Display this help message"
 }
 
@@ -24,6 +25,7 @@ while [[ "$#" -gt 0 ]]; do
         -i) COUNTRY_COLM="$2"; shift ;;
         -e) EMISSION_COLM="$2"; shift ;;
         -f) FILE_PATH="$2"; shift ;;
+        -o) OPERATION="$2"; shift ;;
         -h) show_help ;;   # Display help and exit
         *) echo "Unknown parameter passed: $1"; show_help ;;
     esac
@@ -31,10 +33,10 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Check if required arguments are set
-if [[ -z "$COUNTRY" || -z "$COUNTRY_COLM" || -z "$EMISSION_COLM" || -z "$FILE_PATH" ]]; then
-    echo "Error: -c, -i, -e, and -f arguments are required"
+if [[ -z "$COUNTRY" || -z "$COUNTRY_COLM" || -z "$EMISSION_COLM" || -z "$FILE_PATH" || -z "$OPERATION" ]]; then
+    echo "Error: -c, -i, -e, -f, and -o arguments are required"
     echo "Help message:"
     show_help
 fi
 
-python print_fires.py --country "$COUNTRY" --country_column $COUNTRY_COLM --emissions_column $EMISSION_COLM --file_path "$FILE_PATH"
+python print_fires.py --country "$COUNTRY" --country_column $COUNTRY_COLM --emissions_column $EMISSION_COLM --file_path "$FILE_PATH" --operation "$OPERATION"

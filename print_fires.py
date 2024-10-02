@@ -8,7 +8,7 @@ Module that contains
 from argparse import ArgumentParser, Namespace
 from pathlib import Path
 
-from utils import get_rows_by_column_value
+from utils import *
 
 
 def parse_command_line_args() -> Namespace:
@@ -20,10 +20,8 @@ def parse_command_line_args() -> Namespace:
     """
     parser = ArgumentParser(
         description=(
-            "Given the Agrofood_co2_emission.csv dataset, this script prints the sum of a "
-            "given column for a given country. "
-            "It can be used, for example, to determine the total emissions from savanna fires "
-            "in the United States of America."
+            "Given the Agrofood_co2_emission.csv dataset, this script performs operations on a given column for a givencountry. \n"
+            "Operations you can perform are: 'sum', 'median', 'mean', 'standard deviation'\n\n"
         )
     )
     parser.add_argument(
@@ -50,13 +48,19 @@ def parse_command_line_args() -> Namespace:
         help="The path to the Agrofood_co2_emission.csv",
         required=True,
     )
+    parser.add_argument(
+        "--operation",
+        type=str,
+        help="The operation to perform on emissions data (mean, median, standard deviation)",
+        required=True,
+    )
 
     args = parser.parse_args()
 
     return args
 
 
-def main(csv_path: Path, country: str, country_colm: int, emissions_colm: int):
+def main(csv_path: Path, country: str, country_colm: int, emissions_colm: int, operation: str):
     """
     Workhorse function that:
         (1) gets the rows of a CSV that correspond to the given country
@@ -67,22 +71,22 @@ def main(csv_path: Path, country: str, country_colm: int, emissions_colm: int):
         country (str): name of the country
         country_colm (int): index of country column in the CSV
         emissions_colm (int): index of the emissions column in the CSV
+        operation (str): operation to perform
+            options: "sum", "median", "mean", "standard deviation"
     """
-    rows = get_rows_by_column_value(
-        file_path=csv_path, column_value=country, column_index=country_colm
-    )
+    rows = get_rows_by_column_value(file_path=csv_path, column_value=country, column_index=country_colm)
 
-    total_emissions = 0
-    for row in rows:
-        try:
-            total_emissions += float(row[emissions_colm])
-        except ValueError:
-            raise ValueError(
-                f"Can not convert {row[emissions_colm]} in column {emissions_colm} to a float"
-            )
-    print(
-        f"In the {csv_path.name} dataset, for country='{country}', the sum of values in column {emissions_colm} is {total_emissions}."
-    )
+    data_points = get_data_points(rows,emissions_colm)
+
+    match operation:
+        case "sum":
+            sum_emissions = find_sum(data_points)
+            print(f"In the {csv_path.name} dataset, for country='{country}', the {operation} of values in column {emissions_colm} is {sum_emissions}.")
+        case "mean":
+            mean_emissions = find_mean(data_points)
+            print(f"In the {csv_path.name} dataset, for country='{country}', the {operation} of values in column {emissions_colm} is {sum_emissions}.")
+        case _:
+            raise ValueError("Operation not recognized")
 
 
 if __name__ == "__main__":
@@ -92,4 +96,5 @@ if __name__ == "__main__":
         country=args.country,
         country_colm=args.country_column,
         emissions_colm=args.emissions_column,
+        operation=args.operation
     )
