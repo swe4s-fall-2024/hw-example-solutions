@@ -1,40 +1,41 @@
 #!/bin/bash
 
-pwd
-
 # Function to display the help message
-show_help() {
-    echo "Given the the Agrofood_co2_emission.csv, a country, and an emissions column," \
-    "this script prints the total emissions in the country."
+function display_help {
     echo
-    echo "Usage: ./run.sh [-c|i|e|f]"
+    echo "Usage: ./run.sh [-c|i|e|f|o]"
     echo
     echo "Options:"
     echo "  -c  Name of the country"
     echo "  -i  Index of country column"
     echo "  -e  Index of emissions column"
     echo "  -f  Path to Agrofood_co2_emission.csv"
+    echo "  -o  Operation to perform. Options: sum, mean, median,"
     echo "  -h  Display this help message"
+    echo
+    exit 1
 }
 
-# Parse command line arguments
-while [[ "$#" -gt 0 ]]; do
-    case $1 in
-        -c) COUNTRY="$2"; shift ;;
-        -i) COUNTRY_COLM="$2"; shift ;;
-        -e) EMISSION_COLM="$2"; shift ;;
-        -f) FILE_PATH="$2"; shift ;;
-        -h) show_help ;;   # Display help and exit
-        *) echo "Unknown parameter passed: $1"; show_help ;;
+#option cases and storing variables
+OPERATION="sum" # default operation
+while getopts "c:i:e:f:o:h" opt; do
+    case ${opt} in
+        c) COUNTRY=$OPTARG ;;
+        i) COUNTRY_COLUMN=$OPTARG ;;
+        e) EMISSIONS_COLUMN=$OPTARG ;;
+        f) FILE_PATH=$OPTARG ;;
+        o) OPERATION=$OPTARG ;;
+        h) display_help ;;
+        *) echo "Unknown parameter passed: $0"; display_help ;;
     esac
-    shift
 done
 
-# Check if required arguments are set
-if [[ -z "$COUNTRY" || -z "$COUNTRY_COLM" || -z "$EMISSION_COLM" || -z "$FILE_PATH" ]]; then
-    echo "Error: -c, -i, -e, and -f arguments are required"
-    echo "Help message:"
-    show_help
+#user error message
+if [[ -z "$COUNTRY" || -z "$COUNTRY_COLUMN" || -z "$EMISSIONS_COLUMN" || -z "$FILE_PATH" ]]; then
+        echo "Error: -c, -i, -e, and -f, arguments are required"
+        echo "Help message:"
+        display_help
 fi
 
-python print_fires.py --country "$COUNTRY" --country_column $COUNTRY_COLM --emissions_column $EMISSION_COLM --file_path "$FILE_PATH"
+#running print_fires
+python3 print_fires.py --file_path "$FILE_PATH" --country "$COUNTRY" --country_column "$COUNTRY_COLUMN" --emissions_column "$EMISSIONS_COLUMN" --operation "$OPERATION"
