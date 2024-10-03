@@ -11,7 +11,7 @@ There are two entrypoints:
 For usage information, run `python print_fires.py -h` or `./run.sh -h`, respectively. 
 If you choose to use `run.sh`, make sure that both `run.sh` and `print_fires.py` are in your current working directory.  
 
-### Example usage
+### Example
 
 Both
 
@@ -34,7 +34,7 @@ should print the the total emissions from savanna fires in the USA.
 
 ### v2.0.0
 
-- Changes to `print_fires.py`:
+- `print_fires.py` 
     - Added command line argument parsing
     - Rather than having the country, country column, emissions column, and file path hardcoded, its behavior is now more customizable. For more information, see the [usage](#usage) section
 - Added bash script `run.sh`
