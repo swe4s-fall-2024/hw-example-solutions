@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Function to display the help message
+# Help message
 function display_help {
     echo
     echo "Usage: ./run.sh [-c|i|e|f|o]"
@@ -16,8 +16,8 @@ function display_help {
     exit 1
 }
 
-#option cases and storing variables
-OPERATION="sum" # default operation
+# Parse command line arguments
+OPERATION="sum" # default value
 while getopts "c:i:e:f:o:h" opt; do
     case ${opt} in
         c) COUNTRY=$OPTARG ;;
@@ -30,12 +30,11 @@ while getopts "c:i:e:f:o:h" opt; do
     esac
 done
 
-#user error message
+# Make sure required arguments have been set
 if [[ -z "$COUNTRY" || -z "$COUNTRY_COLUMN" || -z "$EMISSIONS_COLUMN" || -z "$FILE_PATH" ]]; then
         echo "Error: -c, -i, -e, and -f, arguments are required"
         echo "Help message:"
         display_help
 fi
 
-#running print_fires
-python3 print_fires.py --file_path "$FILE_PATH" --country "$COUNTRY" --country_column "$COUNTRY_COLUMN" --emissions_column "$EMISSIONS_COLUMN" --operation "$OPERATION"
+python print_fires.py --file_path "$FILE_PATH" --country "$COUNTRY" --country_column "$COUNTRY_COLUMN" --emissions_column "$EMISSIONS_COLUMN" --operation "$OPERATION"
