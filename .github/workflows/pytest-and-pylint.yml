@@ -1,0 +1,44 @@
+name: Run pytest and pylint
+
+on:
+  push:
+    branches:
+      - '*'
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  run_pylint:
+    name: Run pylint
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: hw5-dev
+          environment-file: environment.yaml
+      - name: Run pylint
+        run: pylint $(git ls-files "*.py")
+
+  run_pytest:
+    name: Run pytest
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash -el {0}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+      - name: Setup conda
+        uses: conda-incubator/setup-miniconda@v2
+        with:
+          activate-environment: hw5-dev
+          environment-file: environment.yaml
+      - name: Run pytest
+        run: pytest

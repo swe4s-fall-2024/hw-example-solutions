@@ -20,8 +20,8 @@ class TestGetRowsByColumnValue:
         """Check that a properly formatted CSV is processed correctly"""
         # Arrange
         # Create CSV file
-        csv_file = tmp_path / "test.csv"
         lines = ["colm1,colm2,colm3", "1,2,3", "a,b,c", "d,2,e"]
+        csv_file = tmp_path / "test.csv"
         csv_file.write_text("\n".join(lines))
 
         expected_output = [["1", "2", "3"], ["d", "2", "e"]]
@@ -48,9 +48,9 @@ class TestGetColmValsAsFloats:
     def test_basic():
         """Check that function works as expected on non-problematic input"""
         # Arrange
-        rows = [["1", "2"], ["4", "5"]]
+        rows = [["1", "2"], ["4", "-5.5"]]
         colm_index = 1
-        expected_output = [2, 5]
+        expected_output = [2, -5.5]
         # Act
         actual_output = get_colm_vals_as_floats(rows=rows, colm_index=colm_index)
         # Assert
