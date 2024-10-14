@@ -1,5 +1,18 @@
 # Agri-food C02 emissions analysis
 
+- [Agri-food C02 emissions analysis](#agri-food-c02-emissions-analysis)
+  - [Introduction](#introduction)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Example](#example)
+  - [Changelog](#changelog)
+    - [v2.1.0](#v210)
+    - [v2.0.0](#v200)
+    - [v1.0.0](#v100)
+  - [Some notes for SWE4S students](#some-notes-for-swe4s-students)
+    - [README.md](#readmemd)
+    - [utils.py](#utilspy)
+
 ## Introduction 
 
 This repo contains a Python script and a bash script to assist in analyses of the [Agri-food CO2 emission Kaggle dataset](https://www.kaggle.com/datasets/alessandrolobello/agri-food-co2-emission-dataset-forecasting-ml).
