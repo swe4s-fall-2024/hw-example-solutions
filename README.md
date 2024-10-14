@@ -38,7 +38,8 @@ If you choose to use `run.sh`, make sure that both `run.sh` and `print_fires.py`
 Both
 
 ```bash
-./run.sh -c "United States of America" -i 0 -e 2 -f ./Agrofood_co2_emission.csv -o "sum"
+./run.sh -c "United States of America" \
+  -i 0 -e 2 -f ./Agrofood_co2_emission.csv -o "sum"
 ```
 
 and 
