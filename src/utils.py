@@ -5,12 +5,13 @@ Agrofood_co2_emission.csv
 
 import math
 from pathlib import Path
-from typing import Any, Iterable, List, Dict, Union
+from typing import Any, Dict, Iterable, List, Union
 
+import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import seaborn as sns
-import matplotlib.pyplot as plt
+
 
 def get_rows_by_column_value(
     file_path: Path, column_value: str, column_index: int = 0
@@ -102,14 +103,12 @@ def compute_median(array: Iterable[float]) -> float:
     return array[math.floor(len(array) / 2)]
 
 
-'''
+"""
 New set of functions for plot creation
-'''
+"""
 
-def get_years(
-    file_path: str,
-    year_column_index: int
-) -> List[int]:
+
+def get_years(file_path: str, year_column_index: int) -> List[int]:
     """
     Reads a CSV file and extracts a sorted list of unique years from the specified column.
 
@@ -134,7 +133,9 @@ def get_years(
             raise ValueError(f"Invalid column index: {year_column_index}")
 
         # Convert year column to integers
-        df.iloc[:, year_column_index] = pd.to_numeric(df.iloc[:, year_column_index], errors='raise')
+        df.iloc[:, year_column_index] = pd.to_numeric(
+            df.iloc[:, year_column_index], errors="raise"
+        )
 
         # Get unique, sorted list of years
         years = np.sort(np.unique(df.iloc[:, year_column_index]))
@@ -151,8 +152,7 @@ def get_years(
 
 
 def make_urban_proportion_heatmap(
-    urban_prop: Dict[str, List[float]],
-    years: List[int]
+    urban_prop: Dict[str, List[float]], years: List[int]
 ) -> plt.figure:
     """
     Plots and returns a heatmap of urban population proportions, where each row represents a
@@ -162,7 +162,7 @@ def make_urban_proportion_heatmap(
         urban_prop (Dict[str, List[float]]): A dictionary where keys are country names and values
         are lists of urban population proportion for each year.
         years (List[int]): List of years that correspond to the columns of the heatmap.
-    
+
     Returns:
         plt.figure: The matplotlib figure object containing the heatmap.
     """
@@ -180,26 +180,23 @@ def make_urban_proportion_heatmap(
         annot_kws={"size": 8},
         cmap="YlGnBu",
         cbar=True,
-        linewidths=.5,
-        ax=ax
+        linewidths=0.5,
+        ax=ax,
     )
 
     # Set the labels and title
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Country')
-    ax.set_title('Urban Proportions by Country and Year')
+    ax.set_xlabel("Year")
+    ax.set_ylabel("Country")
+    ax.set_title("Urban Proportions by Country and Year")
 
     # Save figure object
     fig.savefig(
-        fname='plot_outputs/urban_proportions_heatmap.png',
-        dpi=300,
-        bbox_inches='tight'
+        fname="plot_outputs/urban_proportions_heatmap.png", dpi=300, bbox_inches="tight"
     )
 
+
 def plot_fires_vs_urban(
-    urban_prop: List[float],
-    fires: List[float],
-    country_name: str
+    urban_prop: List[float], fires: List[float], country_name: str
 ) -> plt.figure:
     """
     Plots a scatter plot of forest fires vs. urban population proportion.
@@ -219,30 +216,26 @@ def plot_fires_vs_urban(
     fig, ax = plt.subplots(figsize=(10, 6))
 
     scatter = ax.scatter(
-        x=urban_prop,
-        y=fires,
-        c=fires,
-        cmap='coolwarm',
-        s=100,
-        alpha=0.7,
-        edgecolor='k'
+        x=urban_prop, y=fires, c=fires, cmap="coolwarm", s=100, alpha=0.7, edgecolor="k"
     )
 
     # Add a colorbar for the fires amount
     cbar = fig.colorbar(scatter)
-    cbar.set_label('Forest Fires')
+    cbar.set_label("Forest Fires")
 
     # Set labels and title with larger font sizes
-    ax.set_xlabel('Urban Population Proportion', fontsize=12)
-    ax.set_ylabel('Forest Fires', fontsize=12)
-    ax.set_title(f'{country_name}: Forest Fires vs. Urban Population Proportion', fontsize=14)
+    ax.set_xlabel("Urban Population Proportion", fontsize=12)
+    ax.set_ylabel("Forest Fires", fontsize=12)
+    ax.set_title(
+        f"{country_name}: Forest Fires vs. Urban Population Proportion", fontsize=14
+    )
 
     # Optional: Add a grid for better readability
     ax.grid(True)
 
     # Save figure object
     fig.savefig(
-        fname=f'plot_outputs/{country_name}_fires_vs_urban.png',
+        fname=f"plot_outputs/{country_name}_fires_vs_urban.png",
         dpi=300,
-        bbox_inches='tight'
+        bbox_inches="tight",
     )

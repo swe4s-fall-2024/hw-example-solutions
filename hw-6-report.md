@@ -1,4 +1,4 @@
-# Data Visualization Using matplotlib
+# Maddie Pernat's report
 
 ## Introduction
 
