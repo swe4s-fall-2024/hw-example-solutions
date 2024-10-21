@@ -1,7 +1,10 @@
-name: hw5-dev
+name: hw-6-dev
 channels:
   - conda-forge
 dependencies:
   - numpy
   - pytest
-prefix: /Users/erjo3868/miniforge3/envs/hw5-dev
+  - seaborn
+  - matplotlib
+  - pandas
+prefix: /Users/erjo3868/miniforge3/envs/hw-6-dev

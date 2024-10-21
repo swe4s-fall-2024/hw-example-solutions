@@ -22,7 +22,8 @@ Using these scripts, users can explore things like how the emissions of differen
 
 ## Installation
 
-You need to have Python v3.12 with numpy installed.
+This project depends on the dependencies listed in `environment.yaml`. 
+To create an suitable environment using `conda`, run `conda env create -f environment.yaml` and activate the created environment.
 
 ## Usage
 

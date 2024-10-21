@@ -3,6 +3,8 @@ Tests for utils.py
 """
 
 import pytest
+import numpy as np
+import pandas as pd
 
 from src.utils import (
     compute_mean,
@@ -11,6 +13,7 @@ from src.utils import (
     compute_sum,
     get_colm_vals_as_floats,
     get_rows_by_column_value,
+    get_years,
 )
 
 
@@ -105,3 +108,63 @@ class TestComputeStandardDeviation:
         assert compute_standard_deviation(array=input) == pytest.approx(
             0.816496580927726
         )
+
+# New test for get_years() function
+class TestGetYears:
+    @pytest.fixture
+    def mock_csv(self, tmp_path):
+        """
+        Create a temporary CSV file for testing.
+        """
+        data = {
+            'Year': [1990, 1991, 1992, 1990, 1993, 1991],  # Duplicate years included
+            'Value': [100, 200, 300, 150, 250, 350]
+        }
+        df = pd.DataFrame(data)
+        file_path = tmp_path / "test_years.csv"
+        df.to_csv(file_path, index=False)
+        return str(file_path)
+
+    @staticmethod
+    def test_get_years_sorted(mock_csv):
+        """
+        Test that the function correctly returns a sorted list of unique years
+        """
+        result = get_years(file_path=mock_csv, year_column_index=0)
+        expected = np.array([1990, 1991, 1992, 1993])
+        assert np.array_equal(result, expected)
+
+    @staticmethod
+    def test_get_years_empty(tmp_path):
+        """
+        Test that the function correctly returns a ValueError when an empty CSV file is passed
+        """
+        empty_csv = tmp_path / "empty.csv"
+        pd.DataFrame(columns=["Year", "Value"]).to_csv(empty_csv, index=False)
+        with pytest.raises(ValueError):
+            get_years(file_path=str(empty_csv), year_column_index=0)
+
+    @staticmethod
+    def test_index_out_of_bounds(mock_csv):
+        """
+        Test that the function correctly returns a ValueError when the column index is out of 
+        bounds
+        """
+        with pytest.raises(ValueError):
+            get_years(file_path=mock_csv, year_column_index=2)
+
+    @staticmethod
+    def test_get_years_non_integer(tmp_path):
+        """
+        Test that the function correctly returns a ValueError when the column contains incorrect
+        data type
+        """
+        data = {
+            'Year': ['1990', '1991', 'NotAYear', '1993'],
+            'Value': [100, 200, 300, 250]
+        }
+        df = pd.DataFrame(data)
+        file_path = tmp_path / "non_integer.csv"
+        df.to_csv(file_path, index=False)
+        with pytest.raises(ValueError):
+            get_years(file_path=str(file_path), year_column_index=0)
