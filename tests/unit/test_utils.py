@@ -109,7 +109,7 @@ class TestComputeStandardDeviation:
             0.816496580927726
         )
 
-# New test for new function
+# New test for get_years() function
 class TestGetYears:
     @pytest.fixture
     def mock_csv(self, tmp_path):
