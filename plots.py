@@ -5,8 +5,6 @@ from pathlib import Path
 
 import pandas as pd
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from src.parser_utils import ArgsFormatter
 from src.utils import (
     get_rows_by_column_value,
     get_years,
