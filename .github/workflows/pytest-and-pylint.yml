@@ -24,7 +24,7 @@ jobs:
           activate-environment: hw5-dev
           environment-file: environment.yaml
       - name: Run pylint
-        run: pylint $(git ls-files "*.py")
+        run: pylint $(git ls-files "*.py") --fail-under=8   #added threshold for pylint
 
   run_pytest:
     name: Run pytest

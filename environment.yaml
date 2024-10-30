@@ -1,7 +1,10 @@
-name: hw5-dev
+name: hw-dev
 channels:
   - conda-forge
 dependencies:
   - numpy
   - pytest
-prefix: /Users/erjo3868/miniforge3/envs/hw5-dev
+  - pylint
+  - pandas
+  - matplotlib
+prefix: /Users/erjo3868/miniforge3/envs/hw-dev
