@@ -4,6 +4,7 @@ channels:
 dependencies:
   - numpy
   - pytest
+  - pylint
   - seaborn
   - matplotlib
   - pandas
